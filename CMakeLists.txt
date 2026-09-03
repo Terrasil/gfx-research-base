@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(gfx-research-base VERSION 0.2.3 LANGUAGES C CXX)
+project(gfx-research-base VERSION 0.2.4 LANGUAGES C CXX)
 
 if(NOT DEFINED CPM_SOURCE_CACHE)
     set(CPM_SOURCE_CACHE "${CMAKE_SOURCE_DIR}/.cpm-cache" CACHE PATH "CPM source cache")
@@ -137,6 +137,7 @@ add_library(gfx-research-base STATIC
     src/model.cpp
     src/orbit_camera.cpp
     src/primitives.cpp
+    src/readback.cpp
     src/screenshot.cpp
     src/shader.cpp
     src/texture_2d.cpp

@@ -28,6 +28,8 @@ The repository intentionally stays below the level of a game engine. Experiment 
 - asynchronous GPU timestamp timer
 - CSV output
 - PNG framebuffer capture
+- float texture/framebuffer readback helpers for quantitative experiments
+- reusable mean/median/stddev/p95 statistics helpers
 
 ## Build the example
 
@@ -83,6 +85,10 @@ cmake -S . -B cmake-build-debug -G Ninja \
 The code targets portable C++20. Public code uses the `gfx::research` namespace, `snake_case` functions and methods, trailing underscores for private data members, RAII for OpenGL resources and target-scoped CMake requirements. There are no engine-specific macros, reflection extensions, custom SIMD annotations or global compiler flags.
 
 Types use descriptive `PascalCase` names. OpenGL is intentionally exposed directly so experiments can use features that are not wrapped by the base library.
+
+## Measurement helpers
+
+`gfx/research/readback.hpp` exposes float readback for complete RGBA/depth textures and single pixels. `gfx/research/statistics.hpp` provides publication-oriented summaries with minimum, maximum, mean, median, sample standard deviation and p95. These helpers are intentionally generic so experiment repositories can keep benchmark-specific logic outside the base.
 
 ## Design rule
 
