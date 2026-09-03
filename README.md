@@ -94,3 +94,14 @@ The default Dear ImGui dependency uses the `v1.92.9-docking` tag because `AppCon
 
 GLAD is generated reproducibly for OpenGL 4.6 core without optional extensions. tinygltf is used for geometry parsing only; image decoding is handled by `Texture2D`.
 
+
+## Static Windows executables
+
+`gfx-research-base` and its third-party libraries are built statically. On Windows,
+`GFX_RESEARCH_STATIC_RUNTIME` is enabled by default and research executables can call
+`gfx_research_configure_executable(<target>)` after `add_executable(...)`. With MinGW
+GCC this adds `-static -static-libgcc -static-libstdc++`, avoiding redistribution of
+`libstdc++-6.dll`, `libgcc_s_*.dll`, and `libwinpthread-1.dll`. With MSVC the target
+uses the static `/MT` runtime. System libraries such as `opengl32.dll`, `user32.dll`,
+and `kernel32.dll` remain operating-system dependencies and are not shipped with the
+application. Set `-DGFX_RESEARCH_STATIC_RUNTIME=OFF` to opt out.

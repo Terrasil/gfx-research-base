@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(gfx-research-base VERSION 0.2.2 LANGUAGES C CXX)
+project(gfx-research-base VERSION 0.2.3 LANGUAGES C CXX)
 
 if(NOT DEFINED CPM_SOURCE_CACHE)
     set(CPM_SOURCE_CACHE "${CMAKE_SOURCE_DIR}/.cpm-cache" CACHE PATH "CPM source cache")
@@ -13,6 +13,35 @@ endif()
 set(GFX_RESEARCH_BASE_THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/thirdparty" CACHE PATH "Third-party source directory")
 
 option(GFX_RESEARCH_BASE_BUILD_EXAMPLE "Build the gfx-research-base example" ${PROJECT_IS_TOP_LEVEL})
+option(GFX_RESEARCH_STATIC_RUNTIME "Link the executable runtime statically on supported Windows toolchains" ON)
+
+# Keep all third-party libraries static. The operating system OpenGL/Win32
+# libraries remain normal system dependencies and do not need to be shipped.
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+
+function(gfx_research_configure_executable target)
+    if(NOT TARGET ${target})
+        message(FATAL_ERROR "gfx_research_configure_executable: unknown target '${target}'")
+    endif()
+
+    if(NOT GFX_RESEARCH_STATIC_RUNTIME OR NOT WIN32)
+        return()
+    endif()
+
+    if(MSVC)
+        set_property(TARGET ${target} PROPERTY
+            MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+        )
+    elseif(MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_link_options(${target} PRIVATE
+            -static
+            -static-libgcc
+            -static-libstdc++
+        )
+    elseif(MINGW AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_link_options(${target} PRIVATE -static)
+    endif()
+endfunction()
 
 # Dependencies are downloaded to stable source directories so IDE reloads do not
 # recreate a large FetchContent tree on every clean build directory.
@@ -136,6 +165,7 @@ if(GFX_RESEARCH_BASE_BUILD_EXAMPLE)
     add_executable(gfx-research-base-example example/main.cpp)
     target_compile_features(gfx-research-base-example PRIVATE cxx_std_20)
     target_link_libraries(gfx-research-base-example PRIVATE gfx::research_base)
+    gfx_research_configure_executable(gfx-research-base-example)
     target_compile_definitions(gfx-research-base-example PRIVATE
         GFX_RESEARCH_BASE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
     )
