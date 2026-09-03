@@ -32,13 +32,14 @@ function(gfx_research_configure_executable target)
         set_property(TARGET ${target} PROPERTY
             MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         )
-    elseif(MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_link_options(${target} PRIVATE
             -static
             -static-libgcc
             -static-libstdc++
         )
-    elseif(MINGW AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_link_libraries(${target} PRIVATE winpthread)
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_link_options(${target} PRIVATE -static)
     endif()
 endfunction()
