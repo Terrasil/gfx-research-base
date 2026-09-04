@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(gfx-research-base VERSION 0.2.4 LANGUAGES C CXX)
+project(gfx-research-base VERSION 0.3.0 LANGUAGES C CXX)
 
 if(NOT DEFINED CPM_SOURCE_CACHE)
     set(CPM_SOURCE_CACHE "${CMAKE_SOURCE_DIR}/.cpm-cache" CACHE PATH "CPM source cache")
@@ -131,6 +131,7 @@ target_compile_definitions(gfx_research_imgui PUBLIC GLFW_INCLUDE_NONE)
 
 add_library(gfx-research-base STATIC
     src/application.cpp
+    src/assets.cpp
     src/framebuffer.cpp
     src/fullscreen_triangle.cpp
     src/gpu_timer.cpp
@@ -161,7 +162,10 @@ target_link_libraries(gfx-research-base
         gfx_research_glm
         gfx_research_imgui
 )
-target_compile_definitions(gfx-research-base PUBLIC GLFW_INCLUDE_NONE)
+target_compile_definitions(gfx-research-base
+    PUBLIC GLFW_INCLUDE_NONE
+    PRIVATE GFX_RESEARCH_BASE_ASSET_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets"
+)
 
 if(GFX_RESEARCH_BASE_BUILD_EXAMPLE)
     add_executable(gfx-research-base-example example/main.cpp)

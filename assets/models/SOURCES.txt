@@ -1,0 +1,20 @@
+Bundled research model sources
+
+Stanford Dragon
+  Model family: Stanford 3D Scanning Repository, Stanford Computer Graphics Laboratory
+  Mirror used by the original asset fetcher:
+  https://github.com/Domodhoro/Stanford-Dragon
+
+Suzanne
+  Blender classic monkey-head test mesh
+  Source used by the original asset fetcher:
+  https://github.com/alecjacobson/common-3d-test-models
+
+Utah Teapot
+  Classic Newell/Utah teapot
+  Source used by the original asset fetcher:
+  https://github.com/jaz303/utah-teapot
+
+The bundle also contains bunny.obj, elephant.obj, and sponza.obj from the supplied
+research package. Keep the corresponding upstream attribution/licensing information
+when redistributing these meshes.

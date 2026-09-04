@@ -18,6 +18,7 @@ The repository intentionally stays below the level of a game engine. Experiment 
 - Dear ImGui lifecycle and docking
 - GLM
 - OBJ and glTF/GLB geometry loading
+- bundled classic research models with a shared asset-path API
 - GPU mesh and procedural plane, grid, cube and UV sphere
 - file-based shaders with reload support
 - vertex, tessellation, geometry, fragment and compute stages
@@ -85,6 +86,21 @@ cmake -S . -B cmake-build-debug -G Ninja \
 The code targets portable C++20. Public code uses the `gfx::research` namespace, `snake_case` functions and methods, trailing underscores for private data members, RAII for OpenGL resources and target-scoped CMake requirements. There are no engine-specific macros, reflection extensions, custom SIMD annotations or global compiler flags.
 
 Types use descriptive `PascalCase` names. OpenGL is intentionally exposed directly so experiments can use features that are not wrapped by the base library.
+
+## Bundled research models
+
+Common test meshes live in `assets/models/` so experiment repositories do not duplicate them. The current bundle contains Bunny, Stanford Dragon, Elephant, Sponza, Suzanne, and Utah Teapot. Source/provenance notes are kept in `assets/models/SOURCES.txt`.
+
+Use the public asset API instead of constructing paths in an experiment:
+
+```cpp
+#include <gfx/research/assets.hpp>
+
+gfx::research::Model dragon;
+dragon.load(gfx::research::model_path(gfx::research::ModelAsset::Dragon));
+```
+
+The same API works when `gfx-research-base` is added as a local CMake subdirectory or fetched through CPM.
 
 ## Measurement helpers
 
